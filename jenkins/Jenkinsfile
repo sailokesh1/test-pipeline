@@ -20,7 +20,7 @@ stages{
   // success {
   //   archiveArtifacts artifacts: '**/target/*.war'
   // }
-}
+// }
 
   }
 
