@@ -5,6 +5,10 @@ agent {
   label 'DevServer'
 }
 
+parameters {
+  choice choices: ['dev', 'prod'], name: 'select env'
+}
+
 tools {
   maven 'mymaven'
 }
@@ -14,16 +18,26 @@ stages{
 
   stage('build'){
     steps{
-      sh 'mvn clean package'
+      sh 'mvn clean package -DskipTests=true'
+
     }
-  //   post {
-  // success {
-  //   archiveArtifacts artifacts: '**/target/*.war'
-  // }
-// }
+ 
 
   }
-
+stage('test'){
+  parallel{
+    stage('test-A'){
+      steps{
+        echo 'this is test A'
+      }
+    }
+    stage('test-B'){
+      steps{
+        echo 'this is test B'
+      }
+    }
+  }
+}
 
 
 }
