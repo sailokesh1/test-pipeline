@@ -24,20 +24,36 @@ stages{
  
 
   }
-stage('test'){
-  parallel{
-    stage('test-A'){
-      steps{
-        echo 'this is test A'
+stage('test')
+    {
+    parallel
+          {
+          stage('test-A')
+          {
+            agent { label 'DevServer'}
+           steps{
+                 echo 'this is test A'
+                 sh "mvn test"
+                }
+          }
+          stage('test-B')
+          {
+            agent { label 'DevServer'}
+            steps{
+                  echo 'this is test B'
+                  sh "mvn test"
+                 }
+            }
+          }
+          post{
+            success{
+              dir("webapp/target/")
+              {
+                stash name: "maven-build", includes: "*.war"
+              }
+            }
+          }
       }
-    }
-    stage('test-B'){
-      steps{
-        echo 'this is test B'
-      }
-    }
-  }
-}
 
 
 }
